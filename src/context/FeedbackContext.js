@@ -29,6 +29,13 @@ export const FeedbackProvider = ({ children }) => {
     edit: false,
   });
 
+  // Update feedback item
+  const updateFeedback = (id, updItem) => {
+    setFeedback(
+      feedback.map((item) => (item.id === id ? { ...item, ...updItem } : item))
+    );
+  };
+
   // Set item to be updated
   const editFeedback = (item) => {
     setFeedbackEdit({
@@ -55,7 +62,16 @@ export const FeedbackProvider = ({ children }) => {
   return (
     //   Providing feedback through this value in our Provider
     <FeedbackContext.Provider
-      value={{ feedback, deleteFeedback, addFeedback, editFeedback }}
+      value={{
+        feedback,
+        deleteFeedback,
+        addFeedback,
+        // editFeedback is the function that runs when we click edit button in UI
+        editFeedback,
+        // this is the actual state that holds the item and the boolean
+        feedbackEdit,
+        updateFeedback,
+      }}
     >
       {children}
     </FeedbackContext.Provider>

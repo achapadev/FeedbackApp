@@ -1,10 +1,18 @@
 import React from 'react';
 // will have state to represent which rating is selected
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import FeedbackContext from '../context/FeedbackContext';
 
 function RatingSelect({ select }) {
   const [selected, setSelected] = useState(10);
   //  output will be unordered list of radio buttons styled to look like circled numbers
+
+  const { feedbackEdit } = useContext(FeedbackContext);
+
+  useEffect(() => {
+    setSelected(feedbackEdit.item.rating);
+  }, [feedbackEdit]);
+
   const handleChange = (e) => {
     //    the + infront changes the value from a string type number
     setSelected(+e.currentTarget.value);
