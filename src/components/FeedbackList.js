@@ -4,16 +4,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import FeedbackItem from './FeedbackItem';
 //import FeedbackContext b/c it is the specific Context we want to use here
 import FeedbackContext from '../context/FeedbackContext';
+import Spinner from './shared/Spinner';
 
 function FeedbackList() {
   // what we want to get & have access to is anything set via value prop in FeedbackContext.js
-  const { feedback } = useContext(FeedbackContext);
+  const { feedback, isLoading } = useContext(FeedbackContext);
 
-  if (!feedback || feedback.length === 0) {
+  if (!isLoading && (!feedback || feedback.length === 0)) {
     return <p>No Feedback Yet</p>;
   }
 
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <div className="feedback-list">
       <AnimatePresence>
         {feedback.map((item) => (
@@ -33,7 +36,6 @@ function FeedbackList() {
       </AnimatePresence>
     </div>
   );
-
   // return (
   //   <div className="feedback-list">
   //     {feedback.map((item) => (
