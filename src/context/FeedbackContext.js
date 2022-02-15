@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 // used to generate new ids
 
@@ -6,34 +6,55 @@ const FeedbackContext = createContext();
 
 // Our provider with our state
 export const FeedbackProvider = ({ children }) => {
-  const [feedback, setFeedback] = useState([
-    {
-      id: 1,
-      text: 'This is feedback item 1',
-      rating: 10,
-    },
-    {
-      id: 2,
-      text: 'This is feedback item 2',
-      rating: 9,
-    },
-    {
-      id: 3,
-      text: 'This is feedback item 3',
-      rating: 7,
-    },
-  ]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [feedback, setFeedback] = useState([]);
+  // const [feedback, setFeedback] = useState([
+  //   {
+  //     id: 1,
+  //     text: 'This is feedback item 1',
+  //     rating: 10,
+  //   },
+  //   {
+  //     id: 2,
+  //     text: 'This is feedback item 2',
+  //     rating: 9,
+  //   },
+  //   {
+  //     id: 3,
+  //     text: 'This is feedback item 3',
+  //     rating: 7,
+  //   },
+  // ]);
 
   const [feedbackEdit, setFeedbackEdit] = useState({
     item: {},
     edit: false,
   });
 
+  useEffect(() => {
+    fetchFeedback();
+  }, []);
+
+  //Fetch feedback
+  const fetchFeedback = async () => {
+    const response = await fetch(
+      'http://localhost:5000/feedback?_sort=id&_order=desc'
+    );
+    console.log(response);
+    const data = await response.json();
+    setFeedback(data);
+    setIsLoading(false);
+  };
+
   // Update feedback item
   const updateFeedback = (id, updItem) => {
     setFeedback(
       feedback.map((item) => (item.id === id ? { ...item, ...updItem } : item))
     );
+    setFeedbackEdit({
+      item: {},
+      edit: false,
+    });
   };
 
   // Set item to be updated
@@ -65,6 +86,7 @@ export const FeedbackProvider = ({ children }) => {
       value={{
         feedback,
         deleteFeedback,
+        isLoading,
         addFeedback,
         // editFeedback is the function that runs when we click edit button in UI
         editFeedback,
