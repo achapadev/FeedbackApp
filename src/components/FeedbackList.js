@@ -1,9 +1,14 @@
 import React from 'react';
+import { useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FeedbackItem from './FeedbackItem';
-import PropTypes from 'prop-types';
+//import FeedbackContext b/c it is the specific Context we want to use here
+import FeedbackContext from '../context/FeedbackContext';
 
-function FeedbackList({ feedback, handleDelete }) {
+function FeedbackList({}) {
+  // what we want to get & have access to is anything set via value prop in FeedbackContext.js
+  const { feedback } = useContext(FeedbackContext);
+
   if (!feedback || feedback.length === 0) {
     return <p>No Feedback Yet</p>;
   }
@@ -21,7 +26,7 @@ function FeedbackList({ feedback, handleDelete }) {
             <FeedbackItem
               key={item.id}
               item={item}
-              handleDelete={handleDelete}
+              // handleDelete={handleDelete}
             />
           </motion.div>
         ))}
@@ -38,14 +43,16 @@ function FeedbackList({ feedback, handleDelete }) {
   // );
 }
 
-FeedbackList.propTypes = {
-  feedback: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      text: PropTypes.string.isRequired,
-      rating: PropTypes.number.isRequired,
-    })
-  ),
-};
+// no longer need propTypes defined because we are getting state from context instead of from props
+
+// FeedbackList.propTypes = {
+//   feedback: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       id: PropTypes.number.isRequired,
+//       text: PropTypes.string.isRequired,
+//       rating: PropTypes.number.isRequired,
+//     })
+//   ),
+// };
 
 export default FeedbackList;
