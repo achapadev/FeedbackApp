@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 // used to generate new ids
 
 const FeedbackContext = createContext();
@@ -37,9 +37,7 @@ export const FeedbackProvider = ({ children }) => {
 
   //Fetch feedback
   const fetchFeedback = async () => {
-    const response = await fetch(
-      'http://localhost:5000/feedback?_sort=id&_order=desc'
-    );
+    const response = await fetch('/feedback?_sort=id&_order=desc');
     console.log(response);
     const data = await response.json();
     setFeedback(data);
@@ -73,11 +71,20 @@ export const FeedbackProvider = ({ children }) => {
   };
 
   // Add feedback
-  const addFeedback = (newFeedback) => {
+  const addFeedback = async (newFeedback) => {
+    const response = await fetch('/feedback', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newFeedback),
+    });
+
+    const data = await response.json();
     // add id to newFeedback object
-    newFeedback.id = uuidv4();
+    // newFeedback.id = uuidv4();
     // set feedback to an array w/ all current feedback items and our new one
-    setFeedback([newFeedback, ...feedback]);
+    setFeedback([data, ...feedback]);
   };
 
   return (
