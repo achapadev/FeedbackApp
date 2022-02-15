@@ -5,7 +5,7 @@ import FeedbackItem from './FeedbackItem';
 //import FeedbackContext b/c it is the specific Context we want to use here
 import FeedbackContext from '../context/FeedbackContext';
 
-function FeedbackList({}) {
+function FeedbackList() {
   // what we want to get & have access to is anything set via value prop in FeedbackContext.js
   const { feedback } = useContext(FeedbackContext);
 
